@@ -22,7 +22,7 @@ public class WarningController {
     WarningService warningService;
 
     //创建
-    @RequestMapping(value = "/warn", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/warning", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String createWarn(@RequestBody String warnInfo) throws Exception{
         JsonObject warnString = new JsonParser().parse(warnInfo).getAsJsonObject();
@@ -49,7 +49,7 @@ public class WarningController {
     }
 
     //通过Id查找
-    @RequestMapping(value = "/warn",params = {"warnId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "/warning",params = {"warnId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String getWarnById(@RequestParam Integer warnId) throws Exception{
         try {
@@ -60,7 +60,7 @@ public class WarningController {
     }
 
     //根据Id删除
-    @RequestMapping(value = "/warn",params = {"warnId"},method = RequestMethod.DELETE)
+    @RequestMapping(value = "/warning",params = {"warnId"},method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteWarnById(@RequestParam Integer warnId){
         try {
