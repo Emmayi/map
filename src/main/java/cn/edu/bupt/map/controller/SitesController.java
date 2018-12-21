@@ -35,6 +35,28 @@ public class SitesController {
         }
     }
 
+    private Sites Json2Pipe(JsonObject pipeString) {
+        Sites pipe = new Sites();
+
+        pipe.setTenantid(pipeString.get("tenantid").getAsInt());
+        pipe.setName(pipeString.get("name").getAsString());
+        pipe.setLatitude(pipeString.get("latitude").getAsDouble());
+        pipe.setLongtitude(pipeString.get("longtitude").getAsDouble());
+        pipe.setCreatedat(pipeString.get("createdat").getAsLong());
+
+
+//        pipe.setCompressstatus(pipeString.get("compressstatus").getAsBoolean());
+//        pipe.setDevicesmodelcount(pipeString.get("devicesmodelcount").getAsInt());
+//        pipe.setUpdatedat(pipeString.get("updatedat").getAsLong());
+//        pipe.setVersion(pipeString.get("version").getAsLong());
+//        pipe.setSceneurl(pipeString.get("sceneurl").getAsString());
+//        pipe.setOssstatus(pipeString.get("osstatus").getAsBoolean());
+//        pipe.setScenemodelloca(pipeString.get("scenemodelloca").getAsString());
+
+        return pipe;
+    }
+
+
     //更新
     @RequestMapping(value = "/sites", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
     @ResponseBody
@@ -65,23 +87,6 @@ public class SitesController {
         }
     }
 
-    private Sites Json2Pipe(JsonObject pipeString) {
-        Sites pipe = new Sites();
-        pipe.setCreatedat(pipeString.get("createdat").getAsLong());
-        pipe.setCompressstatus(pipeString.get("compressstatus").getAsBoolean());
-        pipe.setName(pipeString.get("name").getAsString());
-        pipe.setDevicesmodelcount(pipeString.get("devicesmodelcount").getAsInt());
-        pipe.setLatitude(pipeString.get("latitude").getAsDouble());
-        pipe.setLatitude(pipeString.get("latitude").getAsDouble());
-        pipe.setTenantid(pipeString.get("tenantid").getAsInt());
-        pipe.setUpdatedat(pipeString.get("updatedat").getAsLong());
-        pipe.setVersion(pipeString.get("version").getAsLong());
-        pipe.setSceneurl(pipeString.get("sceneurl").getAsString());
-        pipe.setOssstatus(pipeString.get("osstatus").getAsBoolean());
-        pipe.setScenemodelloca(pipeString.get("scenemodelloca").getAsString());
-
-        return pipe;
-    }
 
     //通过Id查找
     @RequestMapping(value = "/sites",params = {"sitesId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
