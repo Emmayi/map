@@ -1,6 +1,7 @@
 package cn.edu.bupt.map.controller;
 
 import cn.edu.bupt.map.entity.Track;
+import cn.edu.bupt.map.mapper.TrackMapper;
 import cn.edu.bupt.map.service.TrackService;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -20,6 +21,9 @@ public class TrackController {
 
     @Autowired
     TrackService trackService;
+
+    @Autowired
+    TrackMapper trackMapper;
 
     //创建
     @RequestMapping(value = "/track", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -69,5 +73,14 @@ public class TrackController {
         }
     }
 
-
+    //获取所有的信息
+    @RequestMapping(value = "/trackAll", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getTrackAll() throws Exception{
+        try {
+            return trackMapper.selectAll().toString();
+        }catch (Exception e){
+            throw new Exception("getTrackAll error!");
+        }
+    }
 }

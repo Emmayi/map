@@ -22,6 +22,9 @@ public class PipeController {
     @Autowired
     PipeService pipeService;
 
+    @Autowired
+    PipeMapper pipeMapper;
+
     //创建
     @RequestMapping(value = "/pipe", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
@@ -70,6 +73,17 @@ public class PipeController {
             pipeService.deleteById(pipeId);
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    //获取所有的信息
+    @RequestMapping(value = "/pipeAll", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getPipeAll() throws Exception{
+        try {
+            return pipeMapper.selectAll().toString();
+        }catch (Exception e){
+            throw new Exception("getPipeAll error!");
         }
     }
 }

@@ -1,6 +1,7 @@
 package cn.edu.bupt.map.controller;
 
 import cn.edu.bupt.map.entity.Sites;
+import cn.edu.bupt.map.mapper.SitesMapper;
 import cn.edu.bupt.map.service.SitesSevice;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -20,6 +21,9 @@ public class SitesController {
 
     @Autowired
     SitesSevice sitesSevice;
+
+    @Autowired
+    SitesMapper sitesMapper;
 
     //创建
     @RequestMapping(value = "/sites", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -107,6 +111,17 @@ public class SitesController {
             sitesSevice.deleteById(sitesId);
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    //获取所有的信息
+    @RequestMapping(value = "/sitesAll", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getSitesAll() throws Exception{
+        try {
+            return sitesMapper.selectAll().toString();
+        }catch (Exception e){
+            throw new Exception("getSitesAll error!");
         }
     }
 }

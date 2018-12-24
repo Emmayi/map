@@ -1,6 +1,7 @@
 package cn.edu.bupt.map.controller;
 
 import cn.edu.bupt.map.entity.Warning;
+import cn.edu.bupt.map.mapper.WarningMapper;
 import cn.edu.bupt.map.service.WarningService;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -20,6 +21,9 @@ public class WarningController {
 
     @Autowired
     WarningService warningService;
+
+    @Autowired
+    WarningMapper warningMapper;
 
     //创建
     @RequestMapping(value = "/warning", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -67,6 +71,17 @@ public class WarningController {
             warningService.deleteById(warnId);
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+
+    //获取所有的信息
+    @RequestMapping(value = "/warningAll", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getWarningAll() throws Exception{
+        try {
+            return warningMapper.selectAll().toString();
+        }catch (Exception e){
+            throw new Exception("getWarningAll error!");
         }
     }
 

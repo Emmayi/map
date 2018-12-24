@@ -1,9 +1,11 @@
 package cn.edu.bupt.map.controller;
 
 import cn.edu.bupt.map.entity.Patroltrack;
+import cn.edu.bupt.map.mapper.PatroltrackMapper;
 import cn.edu.bupt.map.service.PatroltrackService;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,9 @@ public class PatroltrackController {
 
     @Autowired
     PatroltrackService patroltrackService;
+
+    @Autowired
+    PatroltrackMapper patroltrackMapper;
 
     //创建
     @RequestMapping(value = "/patroltrack", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
@@ -71,5 +76,18 @@ public class PatroltrackController {
             e.printStackTrace();
         }
     }
+
+    //获取所有的信息
+    @RequestMapping(value = "/patroltrackAll", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String getPatroltrackAll() throws Exception{
+        try {
+            return patroltrackMapper.selectAll().toString();
+        }catch (Exception e){
+            throw new Exception("getPatroltrackAll error!");
+        }
+    }
+
+
 
 }
