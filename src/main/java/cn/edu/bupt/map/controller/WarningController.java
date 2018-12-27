@@ -45,8 +45,8 @@ public class WarningController {
         warning.setContent(trackString.get("content").getAsString());
         warning.setDeviceid(trackString.get("deviceid").getAsString());
         warning.setTenantid(trackString.get("tenantid").getAsInt());
-        warning.setUpdatedat(trackString.get("updatedat").getAsLong());
-        warning.setVersion(trackString.get("version").getAsLong());
+//        warning.setUpdatedat(trackString.get("updatedat").getAsLong());
+//        warning.setVersion(trackString.get("version").getAsLong());
         warning.setStatus(trackString.get("status").getAsBoolean());
 
         return warning;

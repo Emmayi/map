@@ -48,8 +48,8 @@ public class PipeController {
         pipe.setPipetype(pipeString.get("pipetype").getAsString());
         pipe.setPipewidth(pipeString.get("pipewidth").getAsDouble());
         pipe.setTenantid(pipeString.get("tenantid").getAsInt());
-        pipe.setUpdatedat(pipeString.get("updatedat").getAsLong());
-        pipe.setVersion(pipeString.get("version").getAsLong());
+//        pipe.setUpdatedat(pipeString.get("updatedat").getAsLong());
+//        pipe.setVersion(pipeString.get("version").getAsLong());
 
         return pipe;
     }

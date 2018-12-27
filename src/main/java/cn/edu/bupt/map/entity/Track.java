@@ -237,10 +237,10 @@ public class Track {
                 .append(staffname).append('\"');
         sb.append(",\"createdat\":\"")
                 .append(createdat).append('\"');
-        sb.append(",\"updatedat\":\"")
-                .append(updatedat).append('\"');
-        sb.append(",\"version\":")
-                .append(version);
+//        sb.append(",\"updatedat\":\"")
+//                .append(updatedat).append('\"');
+//        sb.append(",\"version\":")
+//                .append(version);
         sb.append(",\"drawpoint\":")
                 .append(drawpoint);
         sb.append('}');

@@ -273,10 +273,10 @@ public class Warning {
                 .append(status).append('\"');
         sb.append(",\"createdat\":\"")
                 .append(createdat).append('\"');
-        sb.append(",\"updatedat\":\"")
-                .append(updatedat).append('\"');
-        sb.append(",\"version\":")
-                .append(version);
+//        sb.append(",\"updatedat\":\"")
+//                .append(updatedat).append('\"');
+//        sb.append(",\"version\":")
+//                .append(version);
         sb.append('}');
 
         return sb.toString();

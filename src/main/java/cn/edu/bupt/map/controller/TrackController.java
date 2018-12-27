@@ -45,8 +45,8 @@ public class TrackController {
         track.setDrawpoint(trackString.get("drawpoint").getAsString());
         track.setStaffname(trackString.get("staffname").getAsString());
         track.setTenantid(trackString.get("tenantid").getAsInt());
-        track.setUpdatedat(trackString.get("updatedat").getAsLong());
-        track.setVersion(trackString.get("version").getAsLong());
+//        track.setUpdatedat(trackString.get("updatedat").getAsLong());
+//        track.setVersion(trackString.get("version").getAsLong());
 
         return track;
     }

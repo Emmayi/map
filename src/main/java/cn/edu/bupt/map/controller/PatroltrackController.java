@@ -49,8 +49,8 @@ public class PatroltrackController {
         patroltrack.setPipetype(trackString.get("pipetype").getAsString());
         patroltrack.setPipewidth(trackString.get("pipewidth").getAsDouble());
         patroltrack.setTenantid(trackString.get("tenantid").getAsInt());
-        patroltrack.setUpdatedat(trackString.get("updatedat").getAsLong());
-        patroltrack.setVersion(trackString.get("version").getAsLong());
+//        patroltrack.setUpdatedat(trackString.get("updatedat").getAsLong());
+//        patroltrack.setVersion(trackString.get("version").getAsLong());
 
         return patroltrack;
     }
