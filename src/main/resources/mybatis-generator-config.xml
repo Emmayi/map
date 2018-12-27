@@ -18,7 +18,7 @@
 
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
-        </javaTypeResolver>
+        </javaTypeResolver>cd
 
         <!-- 实体类生成的位置 -->
         <javaModelGenerator targetPackage="cn.edu.bupt.map.entity" targetProject="src/main/java">

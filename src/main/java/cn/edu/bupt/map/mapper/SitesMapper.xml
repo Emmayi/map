@@ -37,7 +37,7 @@
     select
     *
     from sites
-    where id > 0
+    where id BETWEEN 157 AND 171
   </select>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >

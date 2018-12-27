@@ -267,8 +267,8 @@ public class Warning {
                 .append(tenantid);
         sb.append(",\"deviceid\":\"")
                 .append(deviceid).append('\"');
-        sb.append(",\"content\":\"")
-                .append(content).append('\"');
+        sb.append(",\"content\":")
+                .append(content);
         sb.append(",\"status\":\"")
                 .append(status).append('\"');
         sb.append(",\"createdat\":\"")

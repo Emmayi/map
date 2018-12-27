@@ -79,7 +79,12 @@ public class WarningController {
     @ResponseBody
     public String getWarningAll() throws Exception{
         try {
-            return warningMapper.selectAll().toString();
+
+            String warnStr = warningMapper.selectAll().toString();
+            String yes = warnStr.replace("\\", "\\");
+
+
+            return yes;
         }catch (Exception e){
             throw new Exception("getWarningAll error!");
         }

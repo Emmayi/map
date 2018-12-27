@@ -439,8 +439,8 @@ public class Sites {
                 .append(ossstatus).append('\"');
         sb.append(",\"devicesmodelcount\":")
                 .append(devicesmodelcount);
-        sb.append(",\"scenemodelloca\":\"")
-                .append(scenemodelloca).append('\"');
+        sb.append(",\"scenemodelloca\":")
+                .append(scenemodelloca);
         sb.append(",\"createdat\":\"")
                 .append(createdat).append('\"');
         sb.append(",\"updatedat\":\"")

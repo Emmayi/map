@@ -97,7 +97,16 @@ public class SitesController {
     @ResponseBody
     public String getSitesById(@RequestParam Integer sitesId) throws Exception{
         try {
-            return sitesSevice.findById(sitesId).toString();
+            String sitesStr = sitesSevice.findById(sitesId).toString();
+            String yes = sitesStr.replace("\\", "/");
+
+//            JsonObject sitesString = new JsonParser().parse(yes).getAsJsonObject();
+//            if(sitesString.get("scenemodelloca").getAsString().equals("")) {
+//                sitesString.add("scenemodelloca",null);
+//            }
+//            return sitesString.toString();
+
+            return yes;
         }catch (Exception e){
             throw new Exception("getSitesById error!");
         }

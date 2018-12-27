@@ -343,8 +343,8 @@ public class Patroltrack {
                 .append(updatedat).append('\"');
         sb.append(",\"version\":")
                 .append(version);
-        sb.append(",\"drawpoint\":\"")
-                .append(drawpoint).append('\"');
+        sb.append(",\"drawpoint\":")
+                .append(drawpoint);
         sb.append('}');
 
         return sb.toString();

@@ -41,7 +41,7 @@
     select
     *
     from warning
-    where id > 0
+    where id > 1
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
