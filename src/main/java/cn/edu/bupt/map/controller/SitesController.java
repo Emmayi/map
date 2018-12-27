@@ -70,19 +70,26 @@ public class SitesController {
             throw new RuntimeException("没有Id，无法更新!");
         }
         Sites pipe = new Sites();
-        pipe.setId(pipeString.get("id").getAsInt());
-        pipe.setCreatedat(pipeString.get("createdat").getAsLong());
-        pipe.setCompressstatus(pipeString.get("compressstatus").getAsBoolean());
-        pipe.setName(pipeString.get("name").getAsString());
-        pipe.setDevicesmodelcount(pipeString.get("devicesmodelcount").getAsInt());
-        pipe.setLatitude(pipeString.get("latitude").getAsDouble());
-        pipe.setLatitude(pipeString.get("latitude").getAsDouble());
+
         pipe.setTenantid(pipeString.get("tenantid").getAsInt());
-        pipe.setUpdatedat(pipeString.get("updatedat").getAsLong());
-        pipe.setVersion(pipeString.get("version").getAsLong());
-        pipe.setSceneurl(pipeString.get("sceneurl").getAsString());
-        pipe.setOssstatus(pipeString.get("osstatus").getAsBoolean());
-        pipe.setScenemodelloca(pipeString.get("scenemodelloca").getAsString());
+        pipe.setName(pipeString.get("name").getAsString());
+        pipe.setLatitude(pipeString.get("latitude").getAsDouble());
+        pipe.setLongtitude(pipeString.get("longtitude").getAsDouble());
+        pipe.setCreatedat(pipeString.get("createdat").getAsLong());
+
+//        pipe.setId(pipeString.get("id").getAsInt());
+//        pipe.setCreatedat(pipeString.get("createdat").getAsLong());
+//        pipe.setCompressstatus(pipeString.get("compressstatus").getAsBoolean());
+//        pipe.setName(pipeString.get("name").getAsString());
+//        pipe.setDevicesmodelcount(pipeString.get("devicesmodelcount").getAsInt());
+//        pipe.setLatitude(pipeString.get("latitude").getAsDouble());
+//        pipe.setLatitude(pipeString.get("latitude").getAsDouble());
+//        pipe.setTenantid(pipeString.get("tenantid").getAsInt());
+//        pipe.setUpdatedat(pipeString.get("updatedat").getAsLong());
+//        pipe.setVersion(pipeString.get("version").getAsLong());
+//        pipe.setSceneurl(pipeString.get("sceneurl").getAsString());
+//        pipe.setOssstatus(pipeString.get("osstatus").getAsBoolean());
+//        pipe.setScenemodelloca(pipeString.get("scenemodelloca").getAsString());
         try {
             sitesSevice.update(pipe);
             return pipe.toString();

@@ -431,22 +431,22 @@ public class Sites {
                 .append(longtitude);
         sb.append(",\"latitude\":")
                 .append(latitude);
-        sb.append(",\"sceneurl\":\"")
-                .append(sceneurl).append('\"');
-        sb.append(",\"compressstatus\":\"")
-                .append(compressstatus).append('\"');
-        sb.append(",\"ossstatus\":\"")
-                .append(ossstatus).append('\"');
-        sb.append(",\"devicesmodelcount\":")
-                .append(devicesmodelcount);
-        sb.append(",\"scenemodelloca\":")
-                .append(scenemodelloca);
+//        sb.append(",\"sceneurl\":\"")
+//                .append(sceneurl).append('\"');
+//        sb.append(",\"compressstatus\":\"")
+//                .append(compressstatus).append('\"');
+//        sb.append(",\"ossstatus\":\"")
+//                .append(ossstatus).append('\"');
+//        sb.append(",\"devicesmodelcount\":")
+//                .append(devicesmodelcount);
+//        sb.append(",\"scenemodelloca\":")
+//                .append(scenemodelloca);
         sb.append(",\"createdat\":\"")
                 .append(createdat).append('\"');
-        sb.append(",\"updatedat\":\"")
-                .append(updatedat).append('\"');
-        sb.append(",\"version\":")
-                .append(version);
+//        sb.append(",\"updatedat\":\"")
+//                .append(updatedat).append('\"');
+//        sb.append(",\"version\":")
+//                .append(version);
         sb.append('}');
 
         return sb.toString();
