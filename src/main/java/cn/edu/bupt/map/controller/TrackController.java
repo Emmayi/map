@@ -51,6 +51,27 @@ public class TrackController {
         return track;
     }
 
+    //更新
+    @RequestMapping(value = "/track", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String update(@RequestBody String trackInfo) throws Exception{
+        JsonObject trackString = new JsonParser().parse(trackInfo).getAsJsonObject();
+        if(trackString.get("id").getAsString().equals("")) {
+            throw new RuntimeException("没有Id，无法更新!");
+        }
+        Track track = new Track();
+        track.setCreatedat(trackString.get("createdat").getAsLong());
+        track.setDrawpoint(trackString.get("drawpoint").getAsString());
+        track.setStaffname(trackString.get("staffname").getAsString());
+        track.setTenantid(trackString.get("tenantid").getAsInt());
+        try {
+            trackMapper.updateByPrimaryKey(track);
+            return track.toString();
+        } catch (Exception e) {
+            throw new Exception("update error!");
+        }
+    }
+
     //通过Id查找
     @RequestMapping(value = "/track",params = {"trackId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody

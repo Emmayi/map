@@ -55,6 +55,33 @@ public class PatroltrackController {
         return patroltrack;
     }
 
+    //更新
+    @RequestMapping(value = "/patroltrack", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String update(@RequestBody String info) throws Exception{
+        JsonObject trackString = new JsonParser().parse(info).getAsJsonObject();
+        if(trackString.get("id").getAsString().equals("")) {
+            throw new RuntimeException("没有Id，无法更新!");
+        }
+        Patroltrack patroltrack = new Patroltrack();
+
+        patroltrack.setCreatedat(trackString.get("createdat").getAsLong());
+        patroltrack.setDrawpoint(trackString.get("drawpoint").getAsString());
+        patroltrack.setName(trackString.get("name").getAsString());
+        patroltrack.setPipecolor(trackString.get("pipecolor").getAsString());
+        patroltrack.setPipetype(trackString.get("pipetype").getAsString());
+        patroltrack.setPipewidth(trackString.get("pipewidth").getAsDouble());
+        patroltrack.setTenantid(trackString.get("tenantid").getAsInt());
+
+        try {
+            patroltrackMapper.updateByPrimaryKey(patroltrack);
+            return patroltrack.toString();
+        } catch (Exception e) {
+            throw new Exception("update error!");
+        }
+    }
+
+
     //通过Id查找
     @RequestMapping(value = "/patroltrack",params = {"trackId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody

@@ -54,6 +54,31 @@ public class PipeController {
         return pipe;
     }
 
+    //更新
+    @RequestMapping(value = "/pipe", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String update(@RequestBody String pipeInfo) throws Exception{
+        JsonObject pipeString = new JsonParser().parse(pipeInfo).getAsJsonObject();
+        if(pipeString.get("id").getAsString().equals("")) {
+            throw new RuntimeException("没有Id，无法更新!");
+        }
+        Pipe pipe = new Pipe();
+        pipe.setCreatedat(pipeString.get("createdat").getAsLong());
+        pipe.setDrawpoint(pipeString.get("drawpoint").getAsString());
+        pipe.setName(pipeString.get("name").getAsString());
+        pipe.setPipecolor(pipeString.get("pipecolor").getAsString());
+        pipe.setPipetype(pipeString.get("pipetype").getAsString());
+        pipe.setPipewidth(pipeString.get("pipewidth").getAsDouble());
+        pipe.setTenantid(pipeString.get("tenantid").getAsInt());
+
+        try {
+            pipeMapper.updateByPrimaryKey(pipe);
+            return pipe.toString();
+        } catch (Exception e) {
+            throw new Exception("update error!");
+        }
+    }
+
     //通过Id查找
     @RequestMapping(value = "/pipe",params = {"pipeId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody

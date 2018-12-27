@@ -52,6 +52,28 @@ public class WarningController {
         return warning;
     }
 
+    //更新
+    @RequestMapping(value = "/warning", method = RequestMethod.PUT, produces = "text/html;charset=UTF-8")
+    @ResponseBody
+    public String update(@RequestBody String trackInfo) throws Exception{
+        JsonObject trackString = new JsonParser().parse(trackInfo).getAsJsonObject();
+        if(trackString.get("id").getAsString().equals("")) {
+            throw new RuntimeException("没有Id，无法更新!");
+        }
+        Warning warning = new Warning();
+        warning.setCreatedat(trackString.get("createdat").getAsLong());
+        warning.setContent(trackString.get("content").getAsString());
+        warning.setDeviceid(trackString.get("deviceid").getAsString());
+        warning.setTenantid(trackString.get("tenantid").getAsInt());
+        warning.setStatus(trackString.get("status").getAsBoolean());
+        try {
+            warningMapper.updateByPrimaryKey(warning);
+            return warning.toString();
+        } catch (Exception e) {
+            throw new Exception("update error!");
+        }
+    }
+
     //通过Id查找
     @RequestMapping(value = "/warning",params = {"warnId"}, method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ResponseBody
