@@ -61,6 +61,7 @@ public class WarningController {
             throw new RuntimeException("没有Id，无法更新!");
         }
         Warning warning = new Warning();
+        warning.setId(trackString.get("id").getAsInt());
         warning.setCreatedat(trackString.get("createdat").getAsLong());
         warning.setContent(trackString.get("content").getAsString());
         warning.setDeviceid(trackString.get("deviceid").getAsString());

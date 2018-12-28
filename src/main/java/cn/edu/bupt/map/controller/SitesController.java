@@ -70,7 +70,7 @@ public class SitesController {
             throw new RuntimeException("没有Id，无法更新!");
         }
         Sites pipe = new Sites();
-
+        pipe.setId(pipeString.get("id").getAsInt());
         pipe.setTenantid(pipeString.get("tenantid").getAsInt());
         pipe.setName(pipeString.get("name").getAsString());
         pipe.setLatitude(pipeString.get("latitude").getAsDouble());

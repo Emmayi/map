@@ -63,6 +63,7 @@ public class PipeController {
             throw new RuntimeException("没有Id，无法更新!");
         }
         Pipe pipe = new Pipe();
+        pipe.setId(pipeString.get("id").getAsInt());
         pipe.setCreatedat(pipeString.get("createdat").getAsLong());
         pipe.setDrawpoint(pipeString.get("drawpoint").getAsString());
         pipe.setName(pipeString.get("name").getAsString());

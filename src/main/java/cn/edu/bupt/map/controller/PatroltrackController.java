@@ -64,7 +64,7 @@ public class PatroltrackController {
             throw new RuntimeException("没有Id，无法更新!");
         }
         Patroltrack patroltrack = new Patroltrack();
-
+        patroltrack.setId(trackString.get("id").getAsInt());
         patroltrack.setCreatedat(trackString.get("createdat").getAsLong());
         patroltrack.setDrawpoint(trackString.get("drawpoint").getAsString());
         patroltrack.setName(trackString.get("name").getAsString());

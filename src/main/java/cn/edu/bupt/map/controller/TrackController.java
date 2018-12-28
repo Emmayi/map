@@ -60,6 +60,7 @@ public class TrackController {
             throw new RuntimeException("没有Id，无法更新!");
         }
         Track track = new Track();
+        track.setId(trackString.get("id").getAsInt());
         track.setCreatedat(trackString.get("createdat").getAsLong());
         track.setDrawpoint(trackString.get("drawpoint").getAsString());
         track.setStaffname(trackString.get("staffname").getAsString());
