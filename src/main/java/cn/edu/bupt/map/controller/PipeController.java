@@ -73,7 +73,7 @@ public class PipeController {
         pipe.setTenantid(pipeString.get("tenantid").getAsInt());
 
         try {
-            pipeMapper.updateByPrimaryKey(pipe);
+            pipeMapper.updateByPrimaryKeyWithBLOBs(pipe);
             return pipe.toString();
         } catch (Exception e) {
             throw new Exception("update error!");

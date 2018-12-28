@@ -66,7 +66,7 @@ public class TrackController {
         track.setStaffname(trackString.get("staffname").getAsString());
         track.setTenantid(trackString.get("tenantid").getAsInt());
         try {
-            trackMapper.updateByPrimaryKey(track);
+            trackMapper.updateByPrimaryKeyWithBLOBs(track);
             return track.toString();
         } catch (Exception e) {
             throw new Exception("update error!");

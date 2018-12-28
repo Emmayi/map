@@ -74,7 +74,7 @@ public class PatroltrackController {
         patroltrack.setTenantid(trackString.get("tenantid").getAsInt());
 
         try {
-            patroltrackMapper.updateByPrimaryKey(patroltrack);
+            patroltrackMapper.updateByPrimaryKeyWithBLOBs(patroltrack);
             return patroltrack.toString();
         } catch (Exception e) {
             throw new Exception("update error!");
