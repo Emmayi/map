@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
@@ -17,6 +19,8 @@ import java.util.Map;
  * @time 2019/1/21 16:16
  * @Description 描述:kafka生产者配置类
  */
+@Configuration
+@EnableKafka
 public class KafkaProducerConfig {
     @Value("${kafka.producer.servers}")
     private String servers;
@@ -45,7 +49,7 @@ public class KafkaProducerConfig {
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
-    @Bean
+    @Bean(name = "kafkaTemplate")
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<String, String>(producerFactory());
     }
