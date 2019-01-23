@@ -6,6 +6,7 @@ import akka.actor.Props;
 import cn.edu.bupt.map.actor.ConsumerActor;
 import cn.edu.bupt.map.actor.ProducerActor;
 import cn.edu.bupt.map.context.ProducerContext;
+import cn.edu.bupt.map.context.TopicContext;
 import cn.edu.bupt.map.exception.CloseException;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +47,7 @@ public class WebsocketUtil {
             if (sessionId != null) {
                 if(session.equals("all")){
                     for(Session sess : ProducerContext.getContext()){
-                        ids.add(sess.getId());
+                        ids.add(StringUtil.getRequestParameter(sess,"username"));
                     }
                 }else{
                     ids.add(sessionId);
@@ -56,42 +57,25 @@ public class WebsocketUtil {
                 ids.addAll(Arrays.asList(sessionIds.split(",")));
             }
             for (String id : ids) {
-                Session s = ProducerContext.getContext(id);
-                if (s != null) {
-                    String fromUserName = StringUtil.getRequestParameter(s, "username");
+                if (TopicContext.getContext( id)) {
+                    String fromUserName = id;
                     String toUserName = StringUtil.getRequestParameter(session, "username");
                     String actorName = fromUserName + "-" + toUserName;
                     ActorSystem actorSystem = (ActorSystem) SpringUtil.getBean("actorSystem");
-                    ActorRef actorRef = actorSystem.actorFor("akka://ActorSystem/user/" + actorName);
-                    if (actorRef == null) {
-                        actorRef = actorSystem.actorOf(Props.create(ConsumerActor.class), actorName);
-                    }
+                    ActorRef actorRef = actorSystem.actorOf(Props.create(ConsumerActor.class), actorName);
                     copyOnWriteArraySet.add(actorRef);
                     actorRef.tell(session, ActorRef.noSender());
                 }
             }
         }
-
-        //KafkaTemplate kafkaTemplate = (KafkaTemplate)SpringUtil.getBean("kafkaTemplate");
-//        Map<String, List<String>> requestParameterMap = session.getRequestParameterMap();
-//        System.out.println(requestParameterMap);
-//        ActorSystem actorSystem = (ActorSystem)SpringUtil.getBean("actorSystem");
-//        ActorRef pf = actorSystem.actorOf(Props.create(ProducerActor.class), "pf");
-//        pf.tell(session.getId(),ActorRef.noSender());
-//        System.out.println("************************************");
-//        //System.out.println(kafkaTemplate);
-//        System.out.println(actorSystem);
         System.out.println("连接成功");
     }
     @OnMessage
     public void onMessage(String message) {
-        String userName = StringUtil.getRequestParameter(session, "username");
-        String actorName = userName+"-"+"producer";
+        String actorName = StringUtil.getRequestParameter(session, "username");
         ActorSystem actorSystem = (ActorSystem)SpringUtil.getBean("actorSystem");
-        ActorRef actorRef = actorSystem.actorFor("akka://ActorSystem/user/" + actorName);
-        if(actorRef == null){
-            actorRef = actorSystem.actorOf(Props.create(ProducerActor.class),actorName);
-        }
+        ActorRef actorRef = actorSystem.actorOf(Props.create(ProducerActor.class),actorName);
+        TopicContext.setContext(actorName);
         actorRef.tell(message,ActorRef.noSender());
     }
 
@@ -99,8 +83,7 @@ public class WebsocketUtil {
     public void onClose(){
         String usertype = StringUtil.getRequestParameter(session, "usertype");
         if(usertype.equals("producer")){
-            String userName = StringUtil.getRequestParameter(session, "username");
-            String actorName = userName+"-"+"producer";
+            String actorName = StringUtil.getRequestParameter(session, "username");
             ActorSystem actorSystem = (ActorSystem)SpringUtil.getBean("actorSystem");
             ActorRef actorRef = actorSystem.actorFor("akka://ActorSystem/user/" + actorName);
             actorRef.tell(new CloseException(),ActorRef.noSender());
