@@ -21,7 +21,12 @@ public class StringUtil {
     public static String getRequestParameter(Session session,String key){
         Map<String, List<String>> requestParameterMap = session.getRequestParameterMap();
         List<String> strings = requestParameterMap.get(key);
-        return strings.get(0);
+        if(strings == null){
+            return null;
+        }else{
+            return strings.get(0);
+        }
+
     }
     /**
      * @author litengfei
@@ -33,13 +38,6 @@ public class StringUtil {
      */
     public static String getUserNameFromPath(String path ){
         String[] strings = path.split("/");
-        String userName = "";
-        for(int i = 0 ; i < strings.length; i++){
-            if(strings[i].contains("-")){
-                userName = strings[i];
-                break;
-            }
-        }
-        return userName;
+        return strings[strings.length-1];
     }
 }
