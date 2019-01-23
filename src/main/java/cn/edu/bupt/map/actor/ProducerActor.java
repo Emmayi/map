@@ -1,12 +1,9 @@
 package cn.edu.bupt.map.actor;
 
-import akka.actor.OneForOneStrategy;
-import akka.actor.SupervisorStrategy;
 import akka.actor.UntypedActor;
 import cn.edu.bupt.map.exception.CloseException;
 import cn.edu.bupt.map.util.SpringUtil;
 import org.springframework.kafka.core.KafkaTemplate;
-import scala.concurrent.duration.Duration;
 
 /**
  * @author litengfei
@@ -27,16 +24,4 @@ public class ProducerActor extends UntypedActor {
             }
         }
     }
-
-//    @Override
-//    public SupervisorStrategy supervisorStrategy(){
-//       return  strategy;
-//    }
-//    private final SupervisorStrategy strategy = new OneForOneStrategy(3, Duration.create("1 minute"), t -> {
-//        if (t instanceof RuntimeException) {
-//            return SupervisorStrategy.stop();
-//        } else {
-//            return SupervisorStrategy.restart();
-//        }
-//    });
 }
