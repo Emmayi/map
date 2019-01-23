@@ -3,8 +3,8 @@ package cn.edu.bupt.map.util;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import cn.edu.bupt.map.actor.ConsumerActor;
 import cn.edu.bupt.map.actor.ProducerActor;
-import cn.edu.bupt.map.context.ConsumerContext;
 import cn.edu.bupt.map.context.ProducerContext;
 import cn.edu.bupt.map.exception.CloseException;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,9 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -28,7 +30,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 public class WebsocketUtil {
     private Session session;
-    private static CopyOnWriteArraySet<WebsocketUtil> copyOnWriteArraySet = new CopyOnWriteArraySet<WebsocketUtil>();
+    private static CopyOnWriteArraySet<ActorRef> copyOnWriteArraySet = new CopyOnWriteArraySet<ActorRef>();
 
     @OnOpen
     public void onOPen(Session session){
@@ -36,9 +38,40 @@ public class WebsocketUtil {
         String usertype = StringUtil.getRequestParameter(session, "usertype");
         if(usertype.equals("producer")){
             ProducerContext.setContext(this);
-        }else if(usertype.equals("consumer")){
-            ConsumerContext.setContext(this);
+
+        }else if(usertype.equals("consumer")) {
+            String sessionId = StringUtil.getRequestParameter(session, "sessionId");
+            String sessionIds = StringUtil.getRequestParameter(session, "sessionIds");
+            ArrayList<String> ids = new ArrayList<>();
+            if (sessionId != null) {
+                if(session.equals("all")){
+                    for(Session sess : ProducerContext.getContext()){
+                        ids.add(sess.getId());
+                    }
+                }else{
+                    ids.add(sessionId);
+                }
+            }
+            if (sessionIds != null) {
+                ids.addAll(Arrays.asList(sessionIds.split(",")));
+            }
+            for (String id : ids) {
+                Session s = ProducerContext.getContext(id);
+                if (s != null) {
+                    String fromUserName = StringUtil.getRequestParameter(s, "username");
+                    String toUserName = StringUtil.getRequestParameter(session, "username");
+                    String actorName = fromUserName + "-" + toUserName;
+                    ActorSystem actorSystem = (ActorSystem) SpringUtil.getBean("actorSystem");
+                    ActorRef actorRef = actorSystem.actorFor("akka://ActorSystem/user/" + actorName);
+                    if (actorRef == null) {
+                        actorRef = actorSystem.actorOf(Props.create(ConsumerActor.class), actorName);
+                    }
+                    copyOnWriteArraySet.add(actorRef);
+                    actorRef.tell(session, ActorRef.noSender());
+                }
+            }
         }
+
         //KafkaTemplate kafkaTemplate = (KafkaTemplate)SpringUtil.getBean("kafkaTemplate");
 //        Map<String, List<String>> requestParameterMap = session.getRequestParameterMap();
 //        System.out.println(requestParameterMap);
@@ -73,60 +106,15 @@ public class WebsocketUtil {
             actorRef.tell(new CloseException(),ActorRef.noSender());
             ProducerContext.removeContext(this);
         }else if(usertype.equals("consumer")){
-            String userName = StringUtil.getRequestParameter(session, "username");
-            String actorName = userName+"-"+"consumer";
-            ActorSystem actorSystem = (ActorSystem)SpringUtil.getBean("actorSystem");
-            ActorRef actorRef = actorSystem.actorFor("akka://ActorSystem/user/" + actorName);
-            actorRef.tell(new CloseException(),ActorRef.noSender());
-            ProducerContext.removeContext(this);
-            ConsumerContext.removeContext(this);
+            Iterator<ActorRef> iterator = copyOnWriteArraySet.iterator();
+            while (iterator.hasNext()){
+                ActorRef actorRef = (ActorRef)iterator.next();
+                actorRef.tell(new CloseException(),ActorRef.noSender());
+            }
         }
-//        ActorSystem actorSystem = (ActorSystem)SpringUtil.getBean("actorSystem");
-//        ActorRef pf = actorSystem.actorFor("akka://ActorSystem/user/pf");
-//        pf.tell(new CloseException(),ActorRef.noSender());
+
         System.out.println("断开连接");
     }
-
-/**
- * @author litengfei
- * @created 2019/1/23 13:52
- * @email: tengfei_2017@sina.com
- *
- *  简要描述方法的作用：向连接的客户端群发消息
- */
-    public void sendMessage(String message) {
-
-        for (WebsocketUtil webSocket : copyOnWriteArraySet) {
-            try {
-                webSocket.session.getBasicRemote().sendText(message);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * @author litengfei
-     * @created 2019/1/23 13:54
-     * @email: tengfei_2017@sina.com
-     *
-     *  简要描述方法的作用：向连接的客户端发送消息
-     */
-    public void sendMessage(String sessionId, String message) throws IOException {
-        Session session = null;
-        WebsocketUtil tempWebSocket = null;
-        for (WebsocketUtil webSocket : copyOnWriteArraySet) {
-            if (webSocket.session.getId().equals(sessionId)) {
-                tempWebSocket = webSocket;
-                session = webSocket.session;
-                break;
-            }
-        }
-        if (session != null) {
-            tempWebSocket.session.getBasicRemote().sendText(message);
-        }
-    }
-
     public Session getSession() {
         return session;
     }
