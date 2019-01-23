@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author zy
  * @date 2018/12/19 下午5:25
@@ -34,5 +36,17 @@ public class PatroltrackImpl implements PatroltrackService {
     public Patroltrack findById(Integer id) {
         log.trace("Executing findById [{}]");
         return patroltrackMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Patroltrack> findALl() {
+        log.trace("Executing findALl [{}]");
+        return patroltrackMapper.selectAll();
+    }
+
+    @Override
+    public void update(Patroltrack patroltrack) {
+        log.trace("Executing update [{}]");
+        patroltrackMapper.updateByPrimaryKeyWithBLOBs(patroltrack);
     }
 }

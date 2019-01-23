@@ -62,13 +62,13 @@ public class WarningController {
         }
         Warning warning = new Warning();
         warning.setId(trackString.get("id").getAsInt());
-        warning.setCreatedat(trackString.get("createdat").getAsLong());
-        warning.setContent(trackString.get("content").getAsString());
-        warning.setDeviceid(trackString.get("deviceid").getAsString());
-        warning.setTenantid(trackString.get("tenantid").getAsInt());
+//        warning.setCreatedat(trackString.get("createdat").getAsLong());
+//        warning.setContent(trackString.get("content").getAsString());
+//        warning.setDeviceid(trackString.get("deviceid").getAsString());
+//        warning.setTenantid(trackString.get("tenantid").getAsInt());
         warning.setStatus(trackString.get("status").getAsBoolean());
         try {
-            warningMapper.updateByPrimaryKey(warning);
+            warningMapper.updateByPrimaryKeySelective(warning);
             return warning.toString();
         } catch (Exception e) {
             throw new Exception("update error!");
@@ -102,11 +102,8 @@ public class WarningController {
     @ResponseBody
     public String getWarningAll() throws Exception{
         try {
-
             String warnStr = warningMapper.selectAll().toString();
             String yes = warnStr.replace("\\", "\\");
-
-
             return yes;
         }catch (Exception e){
             throw new Exception("getWarningAll error!");

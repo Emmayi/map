@@ -23,9 +23,6 @@ public class PatroltrackController {
     @Autowired
     PatroltrackService patroltrackService;
 
-    @Autowired
-    PatroltrackMapper patroltrackMapper;
-
     //创建
     @RequestMapping(value = "/patroltrack", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ResponseBody
@@ -74,7 +71,8 @@ public class PatroltrackController {
         patroltrack.setTenantid(trackString.get("tenantid").getAsInt());
 
         try {
-            patroltrackMapper.updateByPrimaryKeyWithBLOBs(patroltrack);
+            patroltrackService.update(patroltrack);
+//            patroltrackMapper.updateByPrimaryKeyWithBLOBs(patroltrack);
             return patroltrack.toString();
         } catch (Exception e) {
             throw new Exception("update error!");
@@ -109,7 +107,7 @@ public class PatroltrackController {
     @ResponseBody
     public String getPatroltrackAll() throws Exception{
         try {
-            return patroltrackMapper.selectAll().toString();
+            return patroltrackService.findALl().toString();
         }catch (Exception e){
             throw new Exception("getPatroltrackAll error!");
         }

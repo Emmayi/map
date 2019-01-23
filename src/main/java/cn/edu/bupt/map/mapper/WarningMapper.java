@@ -53,4 +53,6 @@ public interface WarningMapper {
      */
     int updateByPrimaryKey(Warning record);
 
+    int updateStatus(Warning record);
+
     List<Warning> selectAll();}
