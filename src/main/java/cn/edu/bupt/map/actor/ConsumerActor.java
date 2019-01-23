@@ -10,8 +10,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.springframework.kafka.core.ConsumerFactory;
 
 import javax.websocket.Session;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -33,11 +31,10 @@ public class ConsumerActor extends UntypedActor {
                 consumer.subscribe(Collections.singletonList(StringUtil.getUserNameFromPath(getSelf().path().toString())));
                 ConsumerRecords<String, String> records = consumer.poll(100);
                 for (ConsumerRecord<String, String> record : records) {
+                    session.getBasicRemote().sendText(record.key()+":"+record.value());
                     System.out.println(record.key());
                     System.out.println(record.value());
                 }
-            }else if(message instanceof ArrayList){
-
             }
 
         }
