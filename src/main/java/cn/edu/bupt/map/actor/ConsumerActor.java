@@ -29,12 +29,15 @@ public class ConsumerActor extends UntypedActor {
                 Session session = (Session) message;
                 Consumer consumer = consumerFactory.createConsumer();
                 consumer.subscribe(Collections.singletonList(StringUtil.getUserNameFromPath(getSelf().path().toString()).split("-")[0]));
-                ConsumerRecords<String, String> records = consumer.poll(100);
-                for (ConsumerRecord<String, String> record : records) {
-                    session.getBasicRemote().sendText(record.key()+":"+record.value());
-                    System.out.println(record.key());
-                    System.out.println(record.value());
-                }
+               while(true){
+                   ConsumerRecords<String, String> records = consumer.poll(1000);
+                   for (ConsumerRecord<String, String> record : records) {
+                       session.getBasicRemote().sendText(record.key()+":"+record.value());
+                       System.out.println(record.key());
+                       System.out.println(record.value());
+                   }
+               }
+
             }
 
         }
