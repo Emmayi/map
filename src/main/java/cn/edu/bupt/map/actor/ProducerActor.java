@@ -3,6 +3,7 @@ package cn.edu.bupt.map.actor;
 import akka.actor.UntypedActor;
 import cn.edu.bupt.map.exception.CloseException;
 import cn.edu.bupt.map.util.SpringUtil;
+import cn.edu.bupt.map.util.StringUtil;
 import org.springframework.kafka.core.KafkaTemplate;
 
 /**
@@ -17,7 +18,7 @@ public class ProducerActor extends UntypedActor {
         if(message instanceof String){
             System.out.println(message);
             KafkaTemplate kafkaTemplate = (KafkaTemplate)SpringUtil.getBean("kafkaTemplate");
-            kafkaTemplate.send("map",getSelf().path(),message);
+            kafkaTemplate.send(StringUtil.getUserNameFromPath(getSelf().path().toString()),getSelf().path(),message);
         }else{
             if (message instanceof  CloseException ){
                 getContext().stop(getSelf());
