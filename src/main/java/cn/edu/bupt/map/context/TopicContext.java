@@ -1,5 +1,10 @@
 package cn.edu.bupt.map.context;
 
+import cn.edu.bupt.map.util.SpringUtil;
+import org.apache.kafka.clients.consumer.Consumer;
+import org.springframework.kafka.core.ConsumerFactory;
+
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -10,6 +15,18 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class TopicContext {
     private static CopyOnWriteArraySet<String> copyOnWriteArraySet = new CopyOnWriteArraySet<String>();
+    private static TopicContext ourInstance = new TopicContext();
+    public static TopicContext getInstance() {
+        return ourInstance;
+    }
+    private TopicContext() {
+        ConsumerFactory consumerFactory = (ConsumerFactory) SpringUtil.getBean("consumerFactory");
+        Consumer consumer = consumerFactory.createConsumer();
+        Map listTopics = consumer.listTopics();
+        for(Object key:listTopics.keySet()){
+            copyOnWriteArraySet.add(key.toString());
+        }
+    }
     public static boolean getContext(String topic){
         if(copyOnWriteArraySet == null){
             return  false;
