@@ -2,7 +2,6 @@ package cn.edu.bupt.map.context;
 
 import akka.actor.ActorRef;
 import cn.edu.bupt.map.exception.CloseException;
-import cn.edu.bupt.map.util.WebsocketUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
