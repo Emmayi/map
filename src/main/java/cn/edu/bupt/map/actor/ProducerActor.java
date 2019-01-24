@@ -19,8 +19,9 @@ public class ProducerActor extends UntypedActor {
     public void onReceive(Object message) throws Exception {
         if(message instanceof String){
             KafkaTemplate kafkaTemplate = (KafkaTemplate)SpringUtil.getBean("kafkaTemplate");
-            String topic = StringUtil.getUserNameFromPath(getSelf().path().toString());
-            kafkaTemplate.send(topic,String.valueOf((new Date()).getTime()),message);
+            String[] topic = StringUtil.getUserNameFromPath(getSelf().path().toString()).split("-");
+            kafkaTemplate.send(topic[0],String.valueOf((new Date()).getTime()),message);
+            System.out.println("发送完成");
         }else{
             if (message instanceof  CloseException ){
                 getContext().stop(getSelf());
