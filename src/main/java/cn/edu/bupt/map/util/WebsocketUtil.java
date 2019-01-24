@@ -5,6 +5,7 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import cn.edu.bupt.map.actor.ConsumerActor;
 import cn.edu.bupt.map.actor.ProducerActor;
+import cn.edu.bupt.map.context.ActorContext;
 import cn.edu.bupt.map.context.ProducerContext;
 import cn.edu.bupt.map.context.TopicContext;
 import cn.edu.bupt.map.exception.CloseException;
@@ -18,6 +19,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -60,11 +62,24 @@ public class WebsocketUtil {
                 if (TopicContext.getContext( id)) {
                     String fromUserName = id;
                     String toUserName = StringUtil.getRequestParameter(session, "username");
-                    String actorName = fromUserName + "-" + toUserName;
+                    String actorName = fromUserName + "-" + toUserName+"-"+UUID.randomUUID().toString();
+//                    Boolean flag = true;
+//                    if(copyOnWriteArraySet!=null){
+//                        Iterator<ActorRef> iterator = copyOnWriteArraySet.iterator();
+//                        while (iterator.hasNext()){
+//                            ActorRef actorRef = (ActorRef)iterator.next();
+//                            if(actorRef.path().toString().contains(actorName)){
+//                                actorRef.tell(new CloseException(),ActorRef.noSender());
+//                            }
+//                        }
+//                    }
+                    ActorContext.removeContext(actorName);
                     ActorSystem actorSystem = (ActorSystem) SpringUtil.getBean("actorSystem");
                     ActorRef actorRef = actorSystem.actorOf(Props.create(ConsumerActor.class), actorName);
                     copyOnWriteArraySet.add(actorRef);
+                    ActorContext.setContext(actorRef);
                     actorRef.tell(session, ActorRef.noSender());
+
                 }
             }
         }
@@ -92,10 +107,13 @@ public class WebsocketUtil {
             Iterator<ActorRef> iterator = copyOnWriteArraySet.iterator();
             while (iterator.hasNext()){
                 ActorRef actorRef = (ActorRef)iterator.next();
+                ActorContext.removeContext(actorRef);
                 actorRef.tell(new CloseException(),ActorRef.noSender());
             }
+            String toUserName = StringUtil.getRequestParameter(session, "username");
+            ActorContext.removeContext(toUserName);
         }
-
+        System.out.println(session.isOpen());
         System.out.println("断开连接");
     }
     public Session getSession() {
