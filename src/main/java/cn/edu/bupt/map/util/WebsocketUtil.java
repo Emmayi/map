@@ -18,9 +18,7 @@ import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @author litengfei
@@ -33,7 +31,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 public class WebsocketUtil {
     private Session session;
-    private static CopyOnWriteArraySet<ActorRef> copyOnWriteArraySet = new CopyOnWriteArraySet<ActorRef>();
 
     @OnOpen
     public void onOPen(Session session){
@@ -41,7 +38,6 @@ public class WebsocketUtil {
         String usertype = StringUtil.getRequestParameter(session, "usertype");
         if(usertype.equals("producer")){
             ProducerContext.setContext(this);
-
         }else if(usertype.equals("consumer")) {
             String sessionId = StringUtil.getRequestParameter(session, "sessionId");
             String sessionIds = StringUtil.getRequestParameter(session, "sessionIds");
@@ -62,22 +58,9 @@ public class WebsocketUtil {
                 if (TopicContext.getContext( id)) {
                     String fromUserName = id;
                     String toUserName = StringUtil.getRequestParameter(session, "username");
-                    String actorName = fromUserName + "-" + toUserName+"-"+UUID.randomUUID().toString();
-//                    Boolean flag = true;
-//                    if(copyOnWriteArraySet!=null){
-//                        Iterator<ActorRef> iterator = copyOnWriteArraySet.iterator();
-//                        while (iterator.hasNext()){
-//                            ActorRef actorRef = (ActorRef)iterator.next();
-//                            if(actorRef.path().toString().contains(actorName)){
-//                                actorRef.tell(new CloseException(),ActorRef.noSender());
-//                            }
-//                        }
-//                    }
-                    ActorContext.removeContext(actorName);
+                    String actorName = fromUserName + "-" + toUserName;
                     ActorSystem actorSystem = (ActorSystem) SpringUtil.getBean("actorSystem");
                     ActorRef actorRef = actorSystem.actorOf(Props.create(ConsumerActor.class), actorName);
-                    copyOnWriteArraySet.add(actorRef);
-                    ActorContext.setContext(actorRef);
                     actorRef.tell(session, ActorRef.noSender());
 
                 }
@@ -88,8 +71,11 @@ public class WebsocketUtil {
     @OnMessage
     public void onMessage(String message) {
         String actorName = StringUtil.getRequestParameter(session, "username");
+        ActorContext.removeContext(actorName);
         ActorSystem actorSystem = (ActorSystem)SpringUtil.getBean("actorSystem");
+        actorName = actorName+"-"+UUID.randomUUID().toString().replace("-","");
         ActorRef actorRef = actorSystem.actorOf(Props.create(ProducerActor.class),actorName);
+        ActorContext.setContext(actorRef);
         TopicContext.setContext(actorName);
         actorRef.tell(message,ActorRef.noSender());
     }
@@ -98,22 +84,8 @@ public class WebsocketUtil {
     public void onClose(){
         String usertype = StringUtil.getRequestParameter(session, "usertype");
         if(usertype.equals("producer")){
-            String actorName = StringUtil.getRequestParameter(session, "username");
-            ActorSystem actorSystem = (ActorSystem)SpringUtil.getBean("actorSystem");
-            ActorRef actorRef = actorSystem.actorFor("akka://ActorSystem/user/" + actorName);
-            actorRef.tell(new CloseException(),ActorRef.noSender());
             ProducerContext.removeContext(this);
-        }else if(usertype.equals("consumer")){
-            Iterator<ActorRef> iterator = copyOnWriteArraySet.iterator();
-            while (iterator.hasNext()){
-                ActorRef actorRef = (ActorRef)iterator.next();
-                ActorContext.removeContext(actorRef);
-                actorRef.tell(new CloseException(),ActorRef.noSender());
-            }
-            String toUserName = StringUtil.getRequestParameter(session, "username");
-            ActorContext.removeContext(toUserName);
         }
-        System.out.println(session.isOpen());
         System.out.println("断开连接");
     }
     public Session getSession() {
