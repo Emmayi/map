@@ -21,7 +21,6 @@ public class ProducerActor extends UntypedActor {
             KafkaTemplate kafkaTemplate = (KafkaTemplate)SpringUtil.getBean("kafkaTemplate");
             String[] topic = StringUtil.getUserNameFromPath(getSelf().path().toString()).split("-");
             kafkaTemplate.send(topic[0],String.valueOf((new Date()).getTime()),message);
-            System.out.println("发送完成");
         }else{
             if (message instanceof  CloseException ){
                 getContext().stop(getSelf());
