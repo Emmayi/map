@@ -1,5 +1,6 @@
 package cn.edu.bupt.map.config;
 
+import cn.edu.bupt.map.factory.KafkaConsumerFactory;
 import cn.edu.bupt.map.listener.Listener;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -10,7 +11,6 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 
 import java.util.HashMap;
@@ -33,8 +33,6 @@ public class KafkaConsumerConfig {
     private String sessionTimeout;
     @Value("${kafka.consumer.auto.commit.interval}")
     private String autoCommitInterval;
-    @Value("${kafka.consumer.group.id}")
-    private String groupId;
     @Value("${kafka.consumer.auto.offset.reset}")
     private String autoOffsetReset;
     @Value("${kafka.consumer.concurrency}")
@@ -50,7 +48,7 @@ public class KafkaConsumerConfig {
 
     @Bean(value = "consumerFactory")
     public ConsumerFactory<String, String> consumerFactory() {
-        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+        return new KafkaConsumerFactory<>(consumerConfigs());
     }
 
 
@@ -62,13 +60,12 @@ public class KafkaConsumerConfig {
         propsMap.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, sessionTimeout);
         propsMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         propsMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        propsMap.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         propsMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
         return propsMap;
     }
-
-    @Bean
-    public Listener listener() {
-        return new Listener();
-    }
+//
+//    @Bean
+//    public Listener listener() {
+//        return new Listener();
+//    }
 }
