@@ -1,7 +1,6 @@
 package cn.edu.bupt.map.config;
 
 import cn.edu.bupt.map.factory.KafkaConsumerFactory;
-import cn.edu.bupt.map.listener.Listener;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
