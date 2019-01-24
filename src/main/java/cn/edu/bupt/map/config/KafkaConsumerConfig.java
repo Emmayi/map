@@ -36,6 +36,15 @@ public class KafkaConsumerConfig {
     private String autoOffsetReset;
     @Value("${kafka.consumer.concurrency}")
     private int concurrency;
+
+    @Bean
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactory());
+        factory.setConcurrency(concurrency);
+        factory.getContainerProperties().setPollTimeout(1500);
+        return factory;
+    }
     @Bean(value = "consumerFactory")
     public ConsumerFactory<String, String> consumerFactory() {
         return new KafkaConsumerFactory<>(consumerConfigs());
