@@ -27,10 +27,6 @@ import java.util.Map;
 public class ConsumerActor extends UntypedActor {
     @Override
     public void onReceive(Object message) {
-        if (message instanceof CloseException) {
-            System.out.println(getSelf().path()+"------------------------"+"stop");
-            getContext().stop(getSelf());
-        } else {
             KafkaConsumerFactory consumerFactory = (KafkaConsumerFactory) SpringUtil.getBean("consumerFactory");
             if (message instanceof Session) {
                 Session session = (Session) message;
@@ -48,10 +44,10 @@ public class ConsumerActor extends UntypedActor {
                    ConsumerRecords<String, String> records = consumer.poll(1000);
                    for (ConsumerRecord<String, String> record : records) {
                        try{
-                           Thread.sleep(1000);
                            session.getBasicRemote().sendText(record.value());
                        }catch (Exception e){
                            getContext().stop(getSelf());
+                           break;
                        }
                        System.out.println(record.key());
                        System.out.println(record.value());
@@ -61,5 +57,4 @@ public class ConsumerActor extends UntypedActor {
             }
 
         }
-    }
 }
