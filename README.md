@@ -1,2 +1,3 @@
 # map
 添加websocket用于实时数据的上传和获取
+script文件夹下为kafka写入和读取的nodejs测试脚本，zip压缩包下为node的依赖库运行时解压即可
