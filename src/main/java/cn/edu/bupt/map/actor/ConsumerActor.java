@@ -36,23 +36,30 @@ public class ConsumerActor extends UntypedActor {
                 consumerFactory.setConfigs(propsMap);
                 Consumer consumer = consumerFactory.createConsumer();
                 consumer.subscribe(Collections.singletonList(topics[0]));
+                Boolean flag = false;
                while(true){
                    if(!session.isOpen()){
-                       getContext().stop(getSelf());
+                       flag =true;
                        break;
                    }
+
                    ConsumerRecords<String, String> records = consumer.poll(1000);
                    for (ConsumerRecord<String, String> record : records) {
                        try{
                            session.getBasicRemote().sendText(record.value());
                        }catch (Exception e){
-                           getContext().stop(getSelf());
+                           flag = true;
                            break;
                        }
                        System.out.println(record.key());
                        System.out.println(record.value());
                    }
+                   if (flag){
+                       break;
+                   }
                }
+               consumer.close();
+               getContext().stop(getSelf());
 
             }
 
