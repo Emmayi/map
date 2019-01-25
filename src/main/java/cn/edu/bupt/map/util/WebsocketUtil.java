@@ -58,7 +58,7 @@ public class WebsocketUtil {
                 if (TopicContext.getContext( id)) {
                     String fromUserName = id;
                     String toUserName = StringUtil.getRequestParameter(session, "username");
-                    String actorName = fromUserName + "-" + toUserName;
+                    String actorName = fromUserName + "-" + toUserName+"-"+UUID.randomUUID().toString().replace("-","");
                     ActorSystem actorSystem = (ActorSystem) SpringUtil.getBean("actorSystem");
                     ActorRef actorRef = actorSystem.actorOf(Props.create(ConsumerActor.class), actorName);
                     actorRef.tell(session, ActorRef.noSender());
