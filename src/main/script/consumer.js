@@ -5,9 +5,9 @@ var Consumer = kafka.Consumer;
 var Offset = kafka.Offset;
 var Client = kafka.Client;
 var argv = {
-    topic: "mary"
+    topic: "pf"
 };
-var topic = argv.topic || 'mary';
+var topic = argv.topic || 'pf';
 var client = new Client('10.112.17.185:2181');
 var topics = [{
         topic: topic,
